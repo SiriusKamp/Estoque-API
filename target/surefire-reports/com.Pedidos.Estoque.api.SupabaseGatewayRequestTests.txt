@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.Pedidos.Estoque.api.SupabaseGatewayRequestTests
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.124 s -- in com.Pedidos.Estoque.api.SupabaseGatewayRequestTests

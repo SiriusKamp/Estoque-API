@@ -1,0 +1,15 @@
+com\Pedidos\Estoque\api\InventoryInsightsServiceTests.class
+com\Pedidos\Estoque\api\RemoteJwtSecurityTests.class
+com\Pedidos\Estoque\api\ContainsSearchTests.class
+com\Pedidos\Estoque\api\StockApiClientServiceTests.class
+com\Pedidos\Estoque\api\SupabaseAuthJwtDecoderTests.class
+com\Pedidos\Estoque\api\SecurityConfigTests.class
+com\Pedidos\Estoque\api\InventoryRpcWriteServiceTests.class
+com\Pedidos\Estoque\api\CatalogWriteServiceTests.class
+com\Pedidos\Estoque\api\InventoryReadServiceTests.class
+com\Pedidos\Estoque\EstoqueApplicationTests.class
+com\Pedidos\Estoque\api\InventoryDecrementServiceTests.class
+com\Pedidos\Estoque\api\SupabaseGatewayRequestTests.class
+com\Pedidos\Estoque\api\CompetitorPricesReadTests.class
+com\Pedidos\Estoque\api\AuthControllerTests.class
+com\Pedidos\Estoque\api\KitImageServiceTests.class

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.Pedidos.Estoque.api.AuthControllerTests
+-------------------------------------------------------------------------------
+Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.041 s -- in com.Pedidos.Estoque.api.AuthControllerTests
