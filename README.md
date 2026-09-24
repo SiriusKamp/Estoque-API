@@ -119,6 +119,10 @@ e chama o RPC. A origem da integração fica no JSON imutável da operação.
 
 Configure no ambiente:
 
+Em desenvolvimento, `application.properties` carrega opcionalmente o arquivo
+`.env` da raiz do projeto. Ele é ignorado pelo Git. Em produção, configure as
+mesmas variáveis no ambiente do serviço; não publique o arquivo local.
+
 - `STOCK_DB_URL`, `STOCK_DB_USER=stock_api`, `STOCK_DB_PASSWORD`: conexão JDBC
   com o PostgreSQL que já possui o esquema de lotes e as views
   `product_catalog` e `product_type_catalog`. Defina uma senha forte para a
@@ -159,6 +163,37 @@ cada transação antes de consultar dados protegidos por RLS. Não use `postgres
 como usuário JDBC: ele pode contornar RLS. A chave de pedidos/comandas é
 verificada pela função restrita `authenticate_stock_api_client` antes de
 aplicar a identidade do proprietário à baixa.
+
+## Publicar no Render
+
+Crie um **Web Service** a partir deste repositório e selecione **Docker** como
+runtime. O `Dockerfile` usa Java 21 e empacota o JAR. O Spring escuta em
+`0.0.0.0` na porta definida por `PORT` pelo Render; localmente usa 8080.
+O `.dockerignore` impede que o `.env` local entre na imagem. Não configure
+um comando de início adicional nem aplique `schema.sql` durante o build.
+
+No painel de variáveis do serviço, configure `STOCK_DB_URL`,
+`STOCK_DB_USER`, `STOCK_DB_PASSWORD`, `SUPABASE_URL`,
+`SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_AUTH_ISSUER` e
+`STOCK_JWT_MODE=remote`. Use `STOCK_API_ALLOWED_ORIGINS` com a origem exata
+do frontend (por exemplo `https://seu-front.vercel.app`) e
+`STOCK_AUTH_REDIRECT_URL` com essa origem seguida de `/auth`. Essas
+variáveis são de **execução**; não coloque a senha do banco no Dockerfile,
+no Git ou nas variáveis `VITE_` do front.
+
+O endereço JDBC inferido no `.env` local usa a conexão direta do Supabase.
+Confirme no painel **Connect** do Supabase se a hospedagem alcança esse
+endereço. Se precisar do pooler de **sessão** para IPv4, copie host/porta do
+painel e use `STOCK_DB_USER=stock_api.<project-ref>`. Evite o pooler de
+transação para este JDBC. A role `stock_api` precisa existir no banco remoto,
+com senha definida, antes do primeiro deploy funcional.
+
+Depois que a URL `https://<servico>.onrender.com` estiver ativa, execute o
+smoke HTTP documentado no projeto Vite e valide login, leitura, escrita e
+imagens com um estoque de teste. Só então configure no Vercel
+`VITE_STOCK_API_URL` com essa **origem**, use `npm run build:api` e publique
+uma prévia do front. O corte das permissões diretas do navegador vem por
+último, após validar essa prévia.
 
 ## Próximos blocos
 
