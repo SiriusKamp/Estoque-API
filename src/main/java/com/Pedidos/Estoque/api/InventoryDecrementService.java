@@ -50,8 +50,7 @@ public class InventoryDecrementService {
 
         // Transaction-local Supabase claim: assert_stock() and the immutable ledger use auth.uid().
         // Never accept this actor from the HTTP body; it comes from a verified JWT or stock key.
-        UUID databaseActor = jdbc.queryForObject("SELECT auth.uid()",
-            new MapSqlParameterSource(), UUID.class);
+        UUID databaseActor = DatabaseActorContext.currentActor(jdbc);
         if (!actorId.equals(databaseActor)) {
             throw new IllegalStateException("O contexto de identidade do banco não foi aplicado.");
         }

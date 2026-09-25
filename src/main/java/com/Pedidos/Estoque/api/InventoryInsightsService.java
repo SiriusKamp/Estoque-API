@@ -115,8 +115,7 @@ public class InventoryInsightsService {
         if (owned.isEmpty()) throw new ResponseStatusException(HttpStatus.NOT_FOUND,
             "Estoque não encontrado.");
         // These read RPCs still call assert_stock()/auth.uid() inside PostgreSQL.
-        UUID databaseActor = jdbc.queryForObject("SELECT auth.uid()",
-            new MapSqlParameterSource(), UUID.class);
+        UUID databaseActor = DatabaseActorContext.currentActor(jdbc);
         if (!actorId.equals(databaseActor)) {
             throw new IllegalStateException("O contexto de identidade do banco não foi aplicado.");
         }

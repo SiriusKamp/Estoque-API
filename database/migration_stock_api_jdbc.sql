@@ -27,8 +27,19 @@ BEGIN
 END
 $migration$;
 
-GRANT USAGE ON SCHEMA public, auth TO stock_api;
-GRANT EXECUTE ON FUNCTION auth.uid() TO stock_api;
+GRANT USAGE ON SCHEMA public TO stock_api;
+
+-- auth.uid() reads this same verified transaction-local claim. Supabase does
+-- not grant custom JDBC roles USAGE on its managed auth schema, so keep the
+-- stock ownership helper invoker-scoped and independent of that schema.
+CREATE OR REPLACE FUNCTION public.owns_stock(_stock_id uuid)
+RETURNS boolean LANGUAGE sql STABLE SECURITY INVOKER SET search_path = '' AS $function$
+  SELECT EXISTS (
+    SELECT 1 FROM public.stocks s
+    WHERE s.id = _stock_id
+      AND s.user_id = nullif(current_setting('request.jwt.claim.sub', true), '')::uuid
+  )
+$function$;
 
 -- A stock key must be checked before its owner is known. Only the server-side
 -- JDBC role can call this function; no table SELECT is needed without a claim.

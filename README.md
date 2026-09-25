@@ -164,6 +164,14 @@ como usuário JDBC: ele pode contornar RLS. A chave de pedidos/comandas é
 verificada pela função restrita `authenticate_stock_api_client` antes de
 aplicar a identidade do proprietário à baixa.
 
+A role `stock_api` não precisa de `USAGE` no esquema `auth`, que é gerenciado
+pelo Supabase. A migração atualiza `public.owns_stock` para ler o mesmo `sub`
+de sessão usado por `auth.uid()`; o Spring também confere esse valor sem chamar
+diretamente uma função do esquema `auth`. Em instalações que já aplicaram uma
+versão anterior, execute novamente `database/migration_stock_api_jdbc.sql`
+antes de publicar esta versão da API. O script é idempotente e não altera dados
+de estoque nem concede permissões por usuário.
+
 ## Publicar no Render
 
 Crie um **Web Service** a partir deste repositório e selecione **Docker** como

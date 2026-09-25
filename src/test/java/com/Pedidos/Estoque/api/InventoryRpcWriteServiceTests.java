@@ -69,7 +69,7 @@ class InventoryRpcWriteServiceTests {
             org.mockito.ArgumentMatchers.<RowMapper<UUID>>any())).thenReturn(List.of(stock));
         when(jdbc.queryForObject(startsWith("SELECT set_config"), any(SqlParameterSource.class),
             eq(String.class))).thenReturn(actor.toString());
-        when(jdbc.queryForObject(eq("SELECT auth.uid()"), any(SqlParameterSource.class),
+        when(jdbc.queryForObject(eq(DatabaseActorContext.READ_ACTOR_SQL), any(SqlParameterSource.class),
             eq(UUID.class))).thenReturn(actor);
         when(jdbc.queryForObject(startsWith("SELECT public.produce_kit"),
             any(SqlParameterSource.class), eq(UUID.class))).thenReturn(operation);
